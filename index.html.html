@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7aboobi Valentine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffcce6;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .game-container {
+            position: relative;
+            width: 500px; /* Match your image width */
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #f8144d;
+            font-size: 36px;
+            text-shadow: 3px 3px 0 #ff99d6;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: #d30532;
+            font-size: 20px;
+            text-shadow: 2px 2px 0 #ff99d6;
+        }
+
+        /* JUST THE BOX BACKGROUND - Remove cat and buttons from this image */
+        .cat-box {
+            /* PUT YOUR BOX BACKGROUND HERE (without cat/buttons) */
+            background-image: url('bg.png');
+            background-size: 100% 100%; /* Fill the entire box */
+            background-repeat: no-repeat;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px; /* Adjust to your box image height */
+            border: none;
+        }
+
+        /* Center area for cat */
+        .cat-container {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; /* Adjust to your cat size */
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        /* Your cat image */
+        .pixel-cat {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            max-width: 100%;
+            max-height: 100%;
+            animation: floatCat 3s infinite ease-in-out;
+        }
+
+        /* Button container at bottom */
+        .buttons-container {
+            position: absolute;
+            bottom: 40px; /* Adjust based on your box design */
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 100px; /* Space between buttons */
+            position: relative;
+            z-index: 10;
+        }
+
+        /* YES button */
+        .yes-btn {
+            background-image: url('yesbutton.png'); /* Your YES button image */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 80px; /* Match your button image size */
+            height: 40px;
+            position: relative;
+            z-index: 30;
+        }
+
+        /* NO button */
+        .no-btn {
+            background-image: url('nobutton.png'); /* Your NO button image */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 80px; /* Match your button image size */
+            height: 40px;
+            position: relative;
+            z-index: 25;
+        }
+
+        /* Hearts animation */
+        .heart {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #ff3399;
+            transform: rotate(45deg);
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .heart:before, .heart:after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #ff3399;
+            border-radius: 50%;
+        }
+
+        .heart:before {
+            top: -8px;
+            left: 0;
+        }
+
+        .heart:after {
+            top: 0;
+            left: -8px;
+        }
+
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
+            border: 6px solid #ff3399;
+            border-radius: 4px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 0 30px rgba(255, 51, 153, 0.7);
+            min-width: 300px;
+        }
+
+        .message h2 {
+            color: #ff3399;
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 0 #ffb3da;
+        }
+
+        .message p {
+            font-size: 20px;
+            color: #cc0066;
+            margin-bottom: 15px;
+        }
+
+        .close-btn {
+            background-color: #ff3399;
+            color: white;
+            border: none;
+            padding: 8px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: rotate(45deg) translateY(0); opacity: 0.8; }
+            50% { transform: rotate(45deg) translateY(-15px); opacity: 1; }
+        }
+
+        @keyframes floatCat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                width: 90%;
+            }
+            
+            h1 { font-size: 28px; }
+            .subtitle { font-size: 16px; }
+            .buttons { gap: 60px; }
+            .message h2 { font-size: 28px; }
+            .message { min-width: 250px; padding: 15px 25px; }
+            
+            .cat-box {
+                min-height: 350px;
+            }
+            
+            .cat-container {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <h1>7aboobi</h1>
+            <div class="subtitle">Will you be my Valentine?</div>
+        </div>
+
+        <!-- BOX AREA -->
+        <div class="cat-box" id="catBox">
+            <!-- Cat in center -->
+            <div class="cat-container" id="catContainer">
+                <img src="catheart.png" alt="Pixel Cat" class="pixel-cat" id="catImage">
+            </div>
+            
+            <!-- Buttons at bottom -->
+            <div class="buttons-container">
+                <div class="buttons">
+                    <button class="no-btn" id="noBtn"></button>
+                    <button class="yes-btn" id="yesBtn"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="message" id="message">
+            <h2>I LOVE YOU!</h2>
+            <p>Happy Valentine's Day, 7aboobi! ❤️</p>
+            <button class="close-btn" id="closeBtn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const message = document.getElementById('message');
+        const closeBtn = document.getElementById('closeBtn');
+        const catContainer = document.getElementById('catContainer');
+        const catImage = document.getElementById('catImage');
+        const catBox = document.getElementById('catBox');
+
+        // Create floating hearts
+        function createHearts() {
+            const heartCount = 12;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                
+                // Position hearts around the cat
+                const left = Math.random() * 80 + 10;
+                const top = Math.random() * 80 + 10;
+                const size = Math.random() * 10 + 8;
+                const delay = Math.random() * 5;
+                
+                heart.style.left = `${left}%`;
+                heart.style.top = `${top}%`;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.animationDelay = `${delay}s`;
+                
+                catContainer.appendChild(heart);
+            }
+        }
+
+        // Move NO button to random position
+        function moveNoButton(e) {
+            e.preventDefault();
+            
+            const buttonsContainer = document.querySelector('.buttons-container');
+            const yesBtnRect = yesBtn.getBoundingClientRect();
+            const containerRect = buttonsContainer.getBoundingClientRect();
+            
+            // Get button dimensions
+            const buttonWidth = noBtn.offsetWidth;
+            const buttonHeight = noBtn.offsetHeight;
+            
+            // Calculate max positions within button area
+            const maxX = containerRect.width - buttonWidth;
+            const maxY = containerRect.height - buttonHeight;
+            
+            // Generate random position
+            let randomX, randomY;
+            let attempts = 0;
+            const maxAttempts = 50;
+            
+            do {
+                randomX = Math.floor(Math.random() * maxX);
+                randomY = Math.floor(Math.random() * maxY);
+                attempts++;
+                
+            } while (attempts < maxAttempts);
+            
+            // Apply new position
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+            
+            // Add shake effect
+            noBtn.style.transform = 'translate(3px, 3px)';
+            setTimeout(() => {
+                noBtn.style.transform = 'translate(0, 0)';
+            }, 80);
+        }
+
+        // Initialize game
+        function initGame() {
+            // Create floating hearts
+            createHearts();
+            
+            // Make NO button move
+            noBtn.addEventListener('mouseover', moveNoButton);
+            noBtn.addEventListener('touchstart', moveNoButton);
+            noBtn.addEventListener('click', moveNoButton);
+            
+            // YES button shows message
+            yesBtn.addEventListener('click', showMessage);
+            
+            // Close button hides message
+            closeBtn.addEventListener('click', hideMessage);
+            
+            // Add pulse animation to YES button
+            setInterval(() => {
+                yesBtn.style.animation = 'pulse 1.5s infinite';
+            }, 3000);
+        }
+
+        // Show message
+        function showMessage() {
+            message.style.display = 'block';
+            
+            // Add hearts animation
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    
+                    const left = Math.random() * 80 + 10;
+                    const size = Math.random() * 15 + 10;
+                    
+                    heart.style.left = `${left}%`;
+                    heart.style.top = `-20px`;
+                    heart.style.width = `${size}px`;
+                    heart.style.height = `${size}px`;
+                    heart.style.position = 'fixed';
+                    heart.style.zIndex = '99';
+                    
+                    document.body.appendChild(heart);
+                    
+                    let top = -20;
+                    const fallInterval = setInterval(() => {
+                        top += 2;
+                        heart.style.top = `${top}px`;
+                        
+                        if (top > window.innerHeight) {
+                            clearInterval(fallInterval);
+                            heart.remove();
+                        }
+                    }, 20);
+                }, i * 200);
+            }
+        }
+
+        // Hide message
+        function hideMessage() {
+            message.style.display = 'none';
+        }
+
+        // Start game
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
